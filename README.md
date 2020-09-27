@@ -25,7 +25,7 @@ Server configuration will be saved in the _server/_ folder. It will have a Wireg
 #### Init Wireguard Config
 
 ```bash
-./user.sh -i
+./wg.sh -i
 ```
 
 Creates the default server configuration file and creates an IP pool for clients. Files are in the _server/_ folder.
@@ -33,7 +33,7 @@ Creates the default server configuration file and creates an IP pool for clients
 #### Add a User
 
 ```bash
-./user.sh -a alice
+./wg.sh -a alice
 ```
 
 Generates a configuration file, private key, public key, and QR code for the client. Files are in the _users/\<username\>/_ folder.
@@ -43,14 +43,14 @@ Server configuration file in _server/_ is updated with the new client settings.
 #### Delete a User
 
 ```bash
-./user.sh -d alice
+./wg.sh -d alice
 ```
 Purges the user from the server configuration and removes all client files in _users/\<username\>/_.
 
 #### Clear All Settings
 
 ```bash
-./user.sh -c
+./wg.sh -c
 ```
 
 Nukes your entire setup from orbit. Use with caution.
