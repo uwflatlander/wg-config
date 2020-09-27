@@ -78,6 +78,7 @@ add_user() {
         exit 1
     fi
     _VPN_IP6=$(convert_ip4_to_ip6 $_VPN_IP4)
+    verify_server_keys
     eval "echo \"$(cat "${template_file}")\"" > $userdir/wg0.conf
     qrencode -o $userdir/$user.png  < $userdir/wg0.conf
 
@@ -114,6 +115,7 @@ generate_server_config_file() {
     fi
 
     # Gen baseline server config
+    verify_server_keys
     eval "echo \"$(cat "${template_file}")\"" > $WG_TMP_CONF_FILE
     
     # Parse SAVED_FILE users into server config 
@@ -139,10 +141,22 @@ EOF
 
 # Nuke everything.
 clear_all() {
-    local interface=$_INTERFACE
-    rm -f ${SAVED_FILE} ${AVAILABLE_IP_FILE} ${WG_CONF_FILE}
-    rm -R "server"
-    rm -rf users
+    echo "This will delete all server and user configuration files. Procedure with caution."
+    echo "Are you sure you want to reset everything?"
+    select yn in "Yes" "No"; do
+        case $yn in
+            Yes )
+                local interface=$_INTERFACE
+                rm -f ${SAVED_FILE} ${AVAILABLE_IP_FILE} ${WG_CONF_FILE}
+                rm -R "server"
+                rm -rf users
+                break
+                ;;
+            No )
+                exit;;
+        esac
+    done
+        
 }
 
 do_user() {
@@ -175,8 +189,25 @@ init_server() {
     if [[ ! -d "server" ]]; then
         mkdir "server"
     fi
+    
+    if [[ -z $_SERVER_PRIVATE_KEY ]]; then
+        wg genkey | tee server/privatekey | wg pubkey > server/publickey
+        chmod 600 server/privatekey
+        _SERVER_PRIVATE_KEY=`cat server/privatekey`
+        _SERVER_PUBLIC_KEY=`cat server/publickey`
+    fi
+ 
     eval "echo \"$(cat "${template_file}")\"" > $WG_CONF_FILE
     chmod 600 $WG_CONF_FILE
+}
+
+verify_server_keys() {
+    if [[ -z $_SERVER_PRIVATE_KEY ]]; then
+        _SERVER_PRIVATE_KEY=`cat server/privatekey`
+    fi
+    if [[ -z $_SERVER_PUBLIC_KEY ]]; then
+        _SERVER_PUBLIC_KEY=`cat server/publickey`
+    fi
 }
 
 # Generate IPV6 address 

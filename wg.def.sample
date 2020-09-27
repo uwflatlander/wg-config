@@ -4,5 +4,6 @@ _VPN_NET4=10.42.42.0/24
 _VPN_NET6_PREFIX=fd9f:182d:2d33:d6c4/64
 _SERVER_PORT=42042
 _SERVER_LISTEN=wg.example.com:$_SERVER_PORT # client use
+# Leave blank to have keys generated
 _SERVER_PUBLIC_KEY=
 _SERVER_PRIVATE_KEY=
