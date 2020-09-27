@@ -1,5 +1,5 @@
 [Interface]
-Address = $_SERVER_IP
+Address = $_SERVER_IP4, $_SERVER_IP6
 ListenPort = $_SERVER_PORT
 PrivateKey = $_SERVER_PRIVATE_KEY
 Table = off

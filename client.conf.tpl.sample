@@ -1,8 +1,8 @@
 [Interface]
-Address = $_VPN_IP
+Address = $_VPN_IP4,$_VPN_IP6
 PrivateKey = $_PRIVATE_KEY
 
 [Peer]
 PublicKey = $_SERVER_PUBLIC_KEY
-AllowedIPs = 0.0.0.0/0
+AllowedIPs = 0.0.0.0/0,::/0
 Endpoint = $_SERVER_LISTEN
